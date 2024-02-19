@@ -1,43 +1,58 @@
-import React, { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
+import React, { useState } from "react";
+import DatePicker, { CalendarContainer } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import "./App.scss";
+
+const START_TIME = "00:00:00";
+const END_TIME = "23:59:59";
 
 function App() {
   const [data, setData] = useState<string>();
   const [selectedDate, setSelectedDate] = useState<Date | null>();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          // "https://tsserv.tinkermode.dev/data?begin=2023-05-24T00:00:00Z&end=2023-05-24T23:59:59Z"
-          "https://tsserv.tinkermode.dev/data?begin=2021-03-04T03:45:00Z&end=2021-03-04T04:17:00Z"
-        );
+  const convertDateFormat = (date: Date) => {
+    return date.toISOString().slice(0, 10);
+  };
 
-        if (!response.ok) {
-          throw new Error("Non-200 response");
-        }
+  const fetchData = async () => {
+    if (!selectedDate) return;
+    const dateISOString = convertDateFormat(selectedDate);
 
-        const timeSeries = await response.text();
-        setData(timeSeries);
-      } catch (error) {
-        console.log("Fetch error: ", error);
+    try {
+      const response = await fetch(
+        `https://tsserv.tinkermode.dev/data?begin=${dateISOString}T${START_TIME}Z&end=${dateISOString}T${END_TIME}Z`
+        // "https://tsserv.tinkermode.dev/data?begin=2021-03-04T03:45:00Z&end=2021-03-04T04:17:00Z"
+      );
+
+      if (!response.ok) {
+        throw new Error("Non-200 response");
       }
-    };
-    fetchData();
-  }, []);
+      const timeSeries = await response.text();
+      setData(timeSeries);
+    } catch (error) {
+      console.log("Fetch error: ", error); // TODO make UI display error message
+    }
+  };
 
-  // console.log("new data", data, typeof data);
-  // console.log("selectedDate", selectedDate);
+  const customCalendarContainer = ({ className, children }) => (
+    <div style={{ position: "relative", left: "20%" }}>
+      <CalendarContainer className={className}>{children}</CalendarContainer>
+    </div>
+  );
 
   return (
     <div className="time-series-app">
-      <DatePicker
-        onChange={(date) => date && setSelectedDate(date)}
-        selected={selectedDate}
-      />
+      <div className="cta-container">
+        <DatePicker
+          onChange={(date) => date && setSelectedDate(date)}
+          selected={selectedDate}
+          calendarContainer={customCalendarContainer}
+        />
+        <button disabled={!selectedDate} onClick={fetchData}>
+          Fetch Data
+        </button>
+      </div>
       show {data}
     </div>
   );
