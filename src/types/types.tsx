@@ -5,6 +5,8 @@ type AppState = {
   setDisplayedDate: (date: Date | null) => void;
   data: PointType[];
   fetchData: () => void;
+  error: string | null;
+  setError: (error: string | null) => void;
 };
 
 type PointType = {

@@ -16,6 +16,8 @@ const useAppState = create<AppState>((set, getState) => ({
   displayedDate: null,
   setDisplayedDate: (date) => set({ displayedDate: date }),
   data: [],
+  error: null,
+  setError: (error) => set({ error }),
   fetchData: async () => {
     const organizeData = (data: string) =>
       data
@@ -31,7 +33,7 @@ const useAppState = create<AppState>((set, getState) => ({
     const convertDateFormat = (date: Date) => {
       return date.toISOString().slice(0, 10);
     };
-    const { selectedDate, setDisplayedDate } = getState();
+    const { selectedDate, setDisplayedDate, setError } = getState();
 
     if (!selectedDate) return;
     const dateISOString = convertDateFormat(selectedDate);
@@ -47,13 +49,20 @@ const useAppState = create<AppState>((set, getState) => ({
       setDisplayedDate(selectedDate);
       set({ data: organizeData(timeSeries) });
     } catch (error) {
-      console.log("Fetch error: ", error); // TODO make UI display error message
+      console.log("Fetch error: ", error);
+      setError("Failed to fetch data");
     }
   },
 }));
 function App() {
-  const { displayedDate, selectedDate, setSelectedDate, data, fetchData } =
-    useAppState();
+  const {
+    displayedDate,
+    selectedDate,
+    setSelectedDate,
+    data,
+    fetchData,
+    error,
+  } = useAppState();
 
   const customCalendarContainer = ({ className, children }) => (
     <div style={{ position: "relative", left: "20%" }}>
@@ -75,6 +84,7 @@ function App() {
           Fetch Data
         </button>
       </div>
+      {error && <div className="error-message">{error}</div>}
       {data.length > 0 && (
         <div className="data-display-container">
           <h3>{`Data on ${displayedDate?.toLocaleDateString("en-US", {
