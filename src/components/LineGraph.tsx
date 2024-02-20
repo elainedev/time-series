@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Chart as ChartJS,
   ChartOptions,
   LineElement,
-  CategoryScale, // x axis
-  LinearScale, // y axis
+  CategoryScale,
+  LinearScale,
   PointElement,
   Tooltip,
   TimeScale,
@@ -12,43 +12,27 @@ import {
 import "chartjs-adapter-date-fns";
 import "chartjs-adapter-luxon";
 import { Line } from "react-chartjs-2";
+import { PointType } from "../types/types";
 
 ChartJS.register(
   LineElement,
-  CategoryScale, // x axis
-  LinearScale, // y axis
+  CategoryScale,
+  LinearScale,
   PointElement,
   Tooltip,
   TimeScale
 );
 
 type LineGraphType = {
-  dataPoints: string[];
+  data: PointType[];
 };
 
-type PointType = {
-  x: Date | string;
-  y: number;
-};
-
-const LineGraph: React.FC<LineGraphType> = ({ dataPoints }) => {
-  const getLinePoints = (points) => {
-    const pointsData: PointType[] = [];
-
-    points.forEach((point) => {
-      pointsData.push({
-        x: `${point.slice(0, 20)}`,
-        y: parseFloat(point.slice(21).trim()),
-      });
-    });
-    return pointsData;
-  };
-
+const LineGraph: React.FC<LineGraphType> = ({ data }) => {
   const chartData = {
     datasets: [
       {
         label: " Value: ",
-        data: getLinePoints(dataPoints),
+        data,
         fill: false,
         tension: 0.4,
         backgroundColor: "maroon",

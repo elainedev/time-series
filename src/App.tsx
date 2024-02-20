@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import DatePicker, { CalendarContainer } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import LineGraph from "./components/LineGraph.tsx";
+import { PointType } from "./types/types.tsx";
 import "./App.scss";
 
 const START_TIME = "00:00:00";
 const END_TIME = "23:59:59";
 
 function App() {
-  const [data, setData] = useState<string[]>([]);
+  const [data, setData] = useState<PointType[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   // convert dates to ISO/RFC3339 format
@@ -18,7 +19,15 @@ function App() {
 
   // put data points into an array
   const organizeData = (data: string) =>
-    data ? data.split("\n").filter((dataPoint) => Boolean(dataPoint)) : [];
+    data
+      ? data
+          .split("\n")
+          .filter((dataPoint) => Boolean(dataPoint))
+          .map((dataPoint) => ({
+            x: `${dataPoint.slice(0, 20)}`, // timestamp
+            y: parseFloat(dataPoint.slice(21).trim()), // value
+          }))
+      : [];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +58,7 @@ function App() {
       <CalendarContainer className={className}>{children}</CalendarContainer>
     </div>
   );
-  // console.log("where my data", data);
+  console.log("where my data", data.slice(0, 10));
   return (
     <div className="time-series-app">
       <div className="flex-container">
@@ -62,8 +71,7 @@ function App() {
           Fetch Data
         </button> */}
       </div>
-      {data[data.length - 1]}
-      {data.length && <LineGraph dataPoints={data} />}
+      {data.length && <LineGraph data={data} />}
     </div>
   );
 }
