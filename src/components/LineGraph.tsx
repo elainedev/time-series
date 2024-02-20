@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import {
   Chart as ChartJS,
+  ChartOptions,
   LineElement,
   CategoryScale, // x axis
   LinearScale, // y axis
   PointElement,
+  Tooltip,
   TimeScale,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
@@ -15,6 +17,7 @@ ChartJS.register(
   CategoryScale, // x axis
   LinearScale, // y axis
   PointElement,
+  Tooltip,
   TimeScale
 );
 
@@ -23,25 +26,22 @@ type LineGraphType = {
 };
 
 const LineGraph: React.FC<LineGraphType> = ({ dataPoints }) => {
-  const exes = [1, 2, 3, 4, 5, 6, 7, 8];
-  const ys0 = [2, 5, 32, 12, 10, 15, 20];
-  const ys = [4, 4, 4, 4, 4, 4, 10, 4];
   const timestamps: string[] = [];
   const values: number[] = [];
 
-  dataPoints.forEach((dataPoint) => {
-    const [timestamp, value] = dataPoint.split(" ");
-    timestamps.push(timestamp.slice(11, 16));
-    values.push(parseFloat(value));
+  console.log("dataPoints", dataPoints[618], typeof dataPoints[618]);
+  dataPoints.forEach((dataPoint, index) => {
+    timestamps.push(dataPoint.slice(11, 19));
+    values.push(parseFloat(dataPoint.slice(21).trim()));
   });
 
-  console.log("ts", timestamps);
-  console.log("values", values);
+  console.log("ts", timestamps[618]);
+  console.log("value", values[618]);
+  // console.log("ts", timestamps);
+  // console.log("values", values);
 
   const chartData = {
-    // labels: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
     labels: timestamps,
-
     datasets: [
       {
         label: "Value",
@@ -55,10 +55,7 @@ const LineGraph: React.FC<LineGraphType> = ({ dataPoints }) => {
     ],
   };
 
-  const chartOptions = {
-    plugins: {
-      legend: true,
-    },
+  const chartOptions: ChartOptions<"line"> = {
     scales: {
       x: {
         // type: "time",
@@ -67,20 +64,20 @@ const LineGraph: React.FC<LineGraphType> = ({ dataPoints }) => {
         // },
         title: {
           display: true,
-          text: "Timefooo",
+          text: "Time",
         },
       },
       y: {
         title: {
           display: true,
-          text: "Valuefooo",
+          text: "Value",
         },
       },
     },
   };
 
   return (
-    <div style={{ width: 600, height: 600 }}>
+    <div>
       <Line data={chartData} options={chartOptions} />
     </div>
   );
