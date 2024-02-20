@@ -30,7 +30,6 @@ const LineGraph: React.FC<TimeSeriesDataType> = ({ data }) => {
         label: " Value: ",
         data,
         fill: false,
-        tension: 0.4,
         backgroundColor: "maroon",
         pointBorderColor: "purple",
       },
@@ -78,11 +77,7 @@ const LineGraph: React.FC<TimeSeriesDataType> = ({ data }) => {
     },
   };
 
-  return (
-    <div>
-      <Line data={chartData} options={chartOptions} />
-    </div>
-  );
+  return <Line data={chartData} options={chartOptions} />;
 };
 
 export default LineGraph;

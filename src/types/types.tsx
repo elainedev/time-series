@@ -1,5 +1,5 @@
 type PointType = {
-  x: Date; // timestamp
+  x: string; // timestamp
   y: number; // value
 };
 

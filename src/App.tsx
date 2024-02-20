@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DatePicker, { CalendarContainer } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import LineGraph from "./components/LineGraph.tsx";
+import DataTable from "./components/DataTable.tsx";
 import { PointType } from "./types/types.tsx";
 import "./App.scss";
 
@@ -58,7 +59,7 @@ function App() {
       <CalendarContainer className={className}>{children}</CalendarContainer>
     </div>
   );
-  console.log("where my data", data.slice(0, 10));
+  console.log("where my data", data.length, data.slice(0, 10));
   return (
     <div className="time-series-app">
       <div className="flex-container">
@@ -71,7 +72,12 @@ function App() {
           Fetch Data
         </button> */}
       </div>
-      {data.length && <LineGraph data={data} />}
+      {data.length && (
+        <div className="data-display-container">
+          <LineGraph data={data} />
+          <DataTable data={data} />
+        </div>
+      )}
     </div>
   );
 }
