@@ -4,12 +4,28 @@
   flex-direction: column;
   padding: 40px;
 
+  .heading {
+    margin: 0;
+  }
+
+  .instruction {
+    margin-bottom: 25px;
+    font-style: italic;
+    font-size: 15px;
+  }
+
   .flex-container {
     display: flex;
   }
 
   .data-display-container {
-    width: 900px;
+    width: 90%;
+  }
+
+  .fetch-button {
+    color: white;
+    background-color: purple;
+    font-weight: 600;
   }
 
   .error-message {

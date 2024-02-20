@@ -50,7 +50,7 @@ const useAppState = create<AppState>((set, getState) => ({
       set({ data: organizeData(timeSeries) });
     } catch (error) {
       console.log("Fetch error: ", error);
-      setError("Failed to fetch data");
+      setError("Failed to fetch data from server");
     }
   },
 }));
@@ -69,10 +69,13 @@ function App() {
       <CalendarContainer className={className}>{children}</CalendarContainer>
     </div>
   );
-  console.log("where my data", data.length, data.slice(0, 10));
+  console.log("where is my data", data.length, data.slice(0, 10));
   return (
     <div className="time-series-app">
-      <h1>Time Series</h1>
+      <h1 className="heading">Time Series</h1>
+      <p className="instruction">
+        Select a date in the input field to see the time data on that day.
+      </p>
       <div className="flex-container">
         <DatePicker
           placeholderText="Select a date"
@@ -80,14 +83,18 @@ function App() {
           selected={selectedDate}
           calendarContainer={customCalendarContainer}
         />
-        <button disabled={!selectedDate} onClick={fetchData}>
+        <button
+          className="fetch-button"
+          disabled={!selectedDate}
+          onClick={fetchData}
+        >
           Fetch Data
         </button>
       </div>
       {error && <div className="error-message">{error}</div>}
       {data.length > 0 && (
         <div className="data-display-container">
-          <h3>{`Data on ${displayedDate?.toLocaleDateString("en-US", {
+          <h3>{`Time Series on ${displayedDate?.toLocaleDateString("en-US", {
             year: "numeric",
             month: "short",
             day: "numeric",
