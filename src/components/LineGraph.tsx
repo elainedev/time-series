@@ -12,7 +12,7 @@ import {
 import "chartjs-adapter-date-fns";
 import "chartjs-adapter-luxon";
 import { Line } from "react-chartjs-2";
-import { PointType } from "../types/types";
+import { TimeSeriesDataType } from "../types/types";
 
 ChartJS.register(
   LineElement,
@@ -23,11 +23,7 @@ ChartJS.register(
   TimeScale
 );
 
-type LineGraphType = {
-  data: PointType[];
-};
-
-const LineGraph: React.FC<LineGraphType> = ({ data }) => {
+const LineGraph: React.FC<TimeSeriesDataType> = ({ data }) => {
   const chartData = {
     datasets: [
       {
