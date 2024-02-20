@@ -69,7 +69,7 @@ function App() {
       <CalendarContainer className={className}>{children}</CalendarContainer>
     </div>
   );
-  console.log("where is my data", data.length, data.slice(0, 10));
+
   return (
     <div className="time-series-app">
       <h1 className="heading">Time Series</h1>

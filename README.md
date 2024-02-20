@@ -1,5 +1,13 @@
 # Time Series: Graph and Table
 
+## Running the App
+
+1. git clone the private repository using `git clone https://<PERSONAL_ACCESS_TOKEN>@github.com
+/elainedev/time-series.git`
+2. `cd` into the repository
+3. run `npm install --legacy-peer-deps` (Include the `--legacy-peer-deps` option)
+4. run `npm start` -- app should start on localhost:3000
+
 ## Notes & Instructions
 
 - Select a date in the input field to see the time series on that day!
@@ -14,3 +22,4 @@
 - Line Graph: `ChartJS`
 - Table: `Material UI`
 - State Management: `Zustand`
+- React@17.0.2
