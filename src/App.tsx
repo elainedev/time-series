@@ -28,7 +28,8 @@ function App() {
       try {
         const response = await fetch(
           // `https://tsserv.tinkermode.dev/data?begin=${dateISOString}T${START_TIME}Z&end=${dateISOString}T${END_TIME}Z`
-          "https://tsserv.tinkermode.dev/data?begin=2021-03-04T03:45:00Z&end=2021-03-04T04:17:00Z"
+          // "https://tsserv.tinkermode.dev/data?begin=2021-03-04T03:45:00Z&end=2021-03-04T04:17:00Z"
+          `https://tsserv.tinkermode.dev/data?begin=2023-12-31T${START_TIME}Z&end=2023-12-31T${END_TIME}Z`
         );
 
         if (!response.ok) {
@@ -48,7 +49,7 @@ function App() {
       <CalendarContainer className={className}>{children}</CalendarContainer>
     </div>
   );
-  console.log("where my data", data);
+  // console.log("where my data", data);
   return (
     <div className="time-series-app">
       <div className="flex-container">
@@ -61,7 +62,7 @@ function App() {
           Fetch Data
         </button> */}
       </div>
-      {data}
+      {data[data.length - 1]}
       {data.length && <LineGraph dataPoints={data} />}
     </div>
   );

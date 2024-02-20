@@ -10,6 +10,7 @@ import {
   TimeScale,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
+import "chartjs-adapter-luxon";
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
@@ -25,31 +26,32 @@ type LineGraphType = {
   dataPoints: string[];
 };
 
+type PointType = {
+  x: Date | string;
+  y: number;
+};
+
 const LineGraph: React.FC<LineGraphType> = ({ dataPoints }) => {
-  const timestamps: string[] = [];
-  const values: number[] = [];
+  const getLinePoints = (points) => {
+    const pointsData: PointType[] = [];
 
-  console.log("dataPoints", dataPoints[618], typeof dataPoints[618]);
-  dataPoints.forEach((dataPoint, index) => {
-    timestamps.push(dataPoint.slice(11, 19));
-    values.push(parseFloat(dataPoint.slice(21).trim()));
-  });
-
-  console.log("ts", timestamps[618]);
-  console.log("value", values[618]);
-  // console.log("ts", timestamps);
-  // console.log("values", values);
+    points.forEach((point) => {
+      pointsData.push({
+        x: `${point.slice(0, 20)}`,
+        y: parseFloat(point.slice(21).trim()),
+      });
+    });
+    return pointsData;
+  };
 
   const chartData = {
-    labels: timestamps,
     datasets: [
       {
-        label: "Value",
-        data: values,
+        label: " Value: ",
+        data: getLinePoints(dataPoints),
         fill: false,
         tension: 0.4,
-        backgroundColor: "red",
-        borderColor: "green",
+        backgroundColor: "maroon",
         pointBorderColor: "purple",
       },
     ],
@@ -58,19 +60,39 @@ const LineGraph: React.FC<LineGraphType> = ({ dataPoints }) => {
   const chartOptions: ChartOptions<"line"> = {
     scales: {
       x: {
-        // type: "time",
-        // time: {
-        //   unit: "hour",
-        // },
+        type: "time",
+        time: {
+          unit: "hour",
+          displayFormats: {
+            hour: "H:mm",
+          },
+        },
+        adapters: {
+          date: {
+            zone: "UTC",
+          },
+        },
         title: {
           display: true,
-          text: "Time",
+          text: "Time (UTC+0)",
         },
       },
       y: {
         title: {
           display: true,
           text: "Value",
+        },
+      },
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          title: (context) =>
+            `Time: ${new Date(context[0].parsed.x)
+              .toISOString()
+              .slice(11, 19)} UTC`,
+
+          label: (context) => `${context.dataset.label}${context.parsed.y}`,
         },
       },
     },
