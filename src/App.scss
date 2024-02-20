@@ -1,5 +1,8 @@
 .time-series-app {
-  padding: 50px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 40px;
 
   .flex-container {
     display: flex;
